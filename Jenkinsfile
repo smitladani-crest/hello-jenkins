@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'agent1'
-        }
-    }
+    agent none
 
     tools {
         go 'go-16'
@@ -12,6 +8,13 @@ pipeline {
     stages {
         
         stage('Build') {
+
+            agent {
+                node {
+                    label 'master'
+                }
+            }
+            
             steps {
                 echo 'Building GO project...'
                 sh 'go build hellojenkins'
@@ -20,6 +23,11 @@ pipeline {
         }
             
         stage('Test') {
+            agent {
+                node {
+                    label 'agent1'
+                }
+            }
 
             parallel {
                 
