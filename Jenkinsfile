@@ -10,18 +10,20 @@ pipeline {
     }
 
     stages {
-        
-        stage('Build') {
-            steps {
-                echo 'Building GO project...'
-                sh 'go build hellojenkins'
+        parallel {
+            stage('Build') {
+                steps {
+                    echo 'Building GO project...'
+                    sh 'go build hellojenkins'
+                    sh './hellojenkins'
+                }
             }
-        }
-        
-        stage('Test') {
-            steps {
-                echo 'Testing the program'
-                sh './hellojenkins'
+            
+            stage('Test') {
+                steps {
+                    echo 'Testing the program'
+                    sh 'Running parallel stage'
+                }
             }
         }
     }
