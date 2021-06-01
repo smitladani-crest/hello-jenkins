@@ -12,13 +12,6 @@ pipeline {
     stages {
         
         stage('Build') {
-
-            agent {
-                node {
-                    label 'master'
-                }
-            }
-            
             steps {
                 echo 'Building GO project...'
                 sh 'go build hellojenkins'
@@ -26,26 +19,22 @@ pipeline {
                 sh 'sleep 10'
             }
         }
-            
-        stage('Test') {
-
-            parallel {
-                
-                stage('Parallel-1') {
-                    steps {
-                        echo 'Parallel-1 stage inside the test stage'
-                        sh 'sleep 5'
-                        echo 'Parallel-1 sleep completes'
-                    }
+        
+        stage('Store-artifacts') {
+            input {
+                message "Would you like to upload artifacts to s3 bucket?"
+                parameters {
+                    booleanParam(name: 'uploadArtifacts', defaultValue: true, description: 'Check if you would like to upload the artifacts to s3 bucket else uncheck it')
                 }
+            }
 
-                stage('Parallel-2') {
-                    steps {
-                        echo 'Parallel-2 stage inside the test stage'
-                        sh 'sleep 3'
-                        echo 'Parallel-2 sleep completes'
-                    }
-                }
+            when {
+                equals expected: true, actual: params.uploadArtifacts
+            }
+
+            steps {
+                echo '*************************'
+                echo 'Uploading artifacts'
             }
         }
     }
