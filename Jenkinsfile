@@ -16,7 +16,6 @@ pipeline {
                 echo 'Building GO project...'
                 sh 'go build hellojenkins'
                 sh './hellojenkins'
-                sh 'sleep 10'
             }
         }
         
