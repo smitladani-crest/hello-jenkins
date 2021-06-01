@@ -1,5 +1,9 @@
 pipeline {
-    agent none
+    agent {
+        node {
+            label 'agent1'
+        }
+    }
 
     tools {
         go 'go-16'
@@ -23,11 +27,6 @@ pipeline {
         }
             
         stage('Test') {
-            agent {
-                node {
-                    label 'agent1'
-                }
-            }
 
             parallel {
                 
