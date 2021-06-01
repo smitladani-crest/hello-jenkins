@@ -35,6 +35,7 @@ pipeline {
                     steps {
                         echo 'Parallel-1 stage inside the test stage'
                         sh 'sleep 5'
+                        echo 'Parallel-1 sleep completes'
                     }
                 }
 
@@ -42,6 +43,7 @@ pipeline {
                     steps {
                         echo 'Parallel-2 stage inside the test stage'
                         sh 'sleep 3'
+                        echo 'Parallel-2 sleep completes'
                     }
                 }
             }
