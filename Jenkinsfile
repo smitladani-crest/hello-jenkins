@@ -1,7 +1,9 @@
+def upload_artifacts
+
 pipeline {
     agent {
         node {
-            label 'agent1'
+            label 'master'
         }
     }
 
@@ -19,22 +21,32 @@ pipeline {
             }
         }
         
+        stage('Decide to store artifacts') {
+            steps {
+                script {
+                    upload_artifacts = input message: "Would you like to upload artifacts to s3 bucket and deploy the build?",
+                    parameters: [
+                        booleanParam(name: 'UPLOAD_ARTIFACTS', defaultValue: true, description: 'Check if you would like to upload the artifacts to s3 bucket else uncheck it'),
+                        choice(name: 'DEPLOY_BUILD', choices: 'no\nyes', description: 'Choose "yes" if you want to deploy this build')
+                    ]
+                }
+            }
+        }
+
         stage('Store-artifacts') {
-            input {
-                message "Would you like to upload artifacts to s3 bucket?"
-                parameters {
-                    booleanParam(name: 'uploadArtifacts', defaultValue: true, description: 'Check if you would like to upload the artifacts to s3 bucket else uncheck it')
+
+            when { 
+                expression { 
+                    return upload_artifacts.UPLOAD_ARTIFACTS
                 }
             }
 
-            // when {
-            //     equals expected: true, actual: params.uploadArtifacts
-            // }
-
             steps {
-                echo "uploadArtifacts: ${params.uploadArtifacts}"
-                echo '*************************'
-                echo 'Uploading artifacts'
+                echo "uploadArtifacts: ${upload_artifacts.UPLOAD_ARTIFACTS}"
+                echo "deploy build: ${upload_artifacts.DEPLOY_BUILD}"
+                echo "*************************"
+                echo "Uploading artifacts..."
+                sh "aws s3 ls"
             }
         }
     }
