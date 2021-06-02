@@ -27,11 +27,12 @@ pipeline {
                 }
             }
 
-            when {
-                equals expected: true, actual: params.uploadArtifacts
-            }
+            // when {
+            //     equals expected: true, actual: params.uploadArtifacts
+            // }
 
             steps {
+                echo ${params.uploadArtifacts}
                 echo '*************************'
                 echo 'Uploading artifacts'
             }
