@@ -45,8 +45,10 @@ pipeline {
                 echo "uploadArtifacts: ${upload_artifacts.UPLOAD_ARTIFACTS}"
                 echo "deploy build: ${upload_artifacts.DEPLOY_BUILD}"
                 echo "*************************"
+                echo "List of objects in the bucket"
+                sh "aws s3 ls s3://learn-jenkins-bucket-to-store-artifacts"
                 echo "Uploading artifacts..."
-                sh "aws s3 ls"
+                sh "aws s3 cp hellojenkins s3://learn-jenkins-bucket-to-store-artifacts"
             }
         }
     }
