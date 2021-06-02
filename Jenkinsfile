@@ -32,7 +32,7 @@ pipeline {
             // }
 
             steps {
-                echo ${params.uploadArtifacts}
+                echo "uploadArtifacts: ${params.uploadArtifacts}"
                 echo '*************************'
                 echo 'Uploading artifacts'
             }
